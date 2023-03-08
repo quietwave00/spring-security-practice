@@ -1,4 +1,4 @@
-package project.semi.securitytest.auth;
+package project.semi.securitytest.config.auth;
 
 
 
