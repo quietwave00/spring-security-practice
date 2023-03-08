@@ -24,16 +24,16 @@ spring:
     show-sql: true
 
 
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google: # /oauth2/authorization/google ? ??? ???? ??.
-#            client-id: ???
-#            client-secret: ???
-#            scope:
-#              - email
-#              - profile
+  security:
+    oauth2:
+      client:
+        registration:
+          google: # /oauth2/authorization/google ? ??? ???? ??.
+            client-id: 490961154864-i1dilml42mtdffdu2h1kh6eilaam3a56.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
 #
 #          facebook:
 #            client-id: ???
