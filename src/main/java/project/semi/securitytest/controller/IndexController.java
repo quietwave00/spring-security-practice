@@ -37,12 +37,14 @@ public class IndexController {
     }
 
     @GetMapping("/test/oauth/login")
-    public @ResponseBody String testLogin(Authentication authentication) {
+    public @ResponseBody String testLogin(Authentication authentication,
+                                          @AuthenticationPrincipal OAuth2User oauth) {
         System.out.println("========== /test/login ================");
         System.out.println("authentication: " + authentication.getPrincipal());
         //authentication: project.semi.securitytest.config.auth.PrincipalDetails@50a13b68
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         System.out.println("authentication: " + oAuth2User.getAttributes());
+        System.out.println("oauth2User: " + oauth.getAttributes());
         return "세션 정보 확인하기";
     }
 
@@ -52,9 +54,11 @@ public class IndexController {
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user() {
+    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return "user";
     }
+
+
 
     @GetMapping("/admin")
     public @ResponseBody String adnin() {
