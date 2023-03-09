@@ -34,6 +34,17 @@ public class User {
 
     private String providerId;
 
-
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", createDate=" + createDate +
+                ", provider='" + provider + '\'' +
+                ", providerId='" + providerId + '\'' +
+                '}';
+    }
 }

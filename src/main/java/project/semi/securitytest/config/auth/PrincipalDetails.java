@@ -3,7 +3,9 @@ package project.semi.securitytest.config.auth;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import project.semi.securitytest.domain.entity.User;
@@ -18,11 +20,16 @@ import java.util.Collection;
 
 //Security Session -> Authentication -> UserDetails
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrincipalDetails implements UserDetails {
 
     private User user;
+
+    public User getUser() {
+        return user;
+    }
 
     //user의 권한 리턴
     @Override
@@ -68,4 +75,5 @@ public class PrincipalDetails implements UserDetails {
 
         return true;
     }
+
 }
