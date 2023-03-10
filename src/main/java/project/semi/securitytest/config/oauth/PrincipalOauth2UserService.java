@@ -1,15 +1,28 @@
 package project.semi.securitytest.config.oauth;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import project.semi.securitytest.config.auth.PrincipalDetails;
+import project.semi.securitytest.domain.entity.User;
+import project.semi.securitytest.repository.UserRepository;
 
+//구글로부터 받은 userRequest에 대한 후처리 메소드
 @Service
+@RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
-    //구글로부터 받은 userRequest에 대한 후처리 메소드
+    @Setter
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         System.out.println("userRequest: " + userRequest);
@@ -24,11 +37,34 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         //구글 로그인 버튼 -> 로그인 창 -> 로그인 완료 -> code를 리턴(OAuth2 라이브러리가 받음) -> AccessToken 요청 = userRequest 정보
         //userRequest에서 loadUser 메소드에서 회원 프로필을 받음(구글로부터)
+
         System.out.println("userRequest: " + super.loadUser(userRequest).getAttributes());
         //userRequest: {sub=100590799182526385026, name=갸갸, given_name=갸, family_name=갸, picture=https://lh3.googleusercontent.com/a/AGNmyxZoByKpU8TrWC_ghAKFhsFE781m93CtP9zwzCpb=s96-c, email=quietwave00@gmail.com, email_verified=true, locale=ko}
 
         OAuth2User oauth2User = super.loadUser(userRequest);
+        System.out.println("oauth2User: " + oauth2User.getAttributes());
 
-        return super.loadUser(userRequest);
+        String provider = "google"; //google
+        String providerId = oauth2User.getAttribute("sub");
+        String username = provider + "_" + providerId; //google_100590799182526385026
+        String password = bCryptPasswordEncoder.encode("겟인데어");
+        String email = oauth2User.getAttribute("email");
+        String role = "ROLE_USER";
+
+        System.out.println(username);
+        //username으로 찾아서 없을 경우 회원가입 진행
+        User userEntity = userRepository.findByUsername(username);
+        if(userEntity == null) {
+            userEntity = User.builder()
+                    .username(username)
+                    .password(password)
+                    .email(email)
+                    .role(role)
+                    .provider(provider)
+                    .providerId(providerId)
+                    .build();
+            userRepository.save(userEntity);
+        }
+        return new PrincipalDetails(userEntity, oauth2User.getAttributes());
     }
 }

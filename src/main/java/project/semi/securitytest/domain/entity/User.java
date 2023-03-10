@@ -1,7 +1,6 @@
 package project.semi.securitytest.domain.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
@@ -13,6 +12,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -46,5 +47,16 @@ public class User {
                 ", provider='" + provider + '\'' +
                 ", providerId='" + providerId + '\'' +
                 '}';
+    }
+
+    @Builder
+    public User(String username, String password, String email, String role, Timestamp createDate, String provider, String providerId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.createDate = createDate;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 }

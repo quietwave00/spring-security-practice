@@ -43,7 +43,7 @@ public class IndexController {
         System.out.println("authentication: " + authentication.getPrincipal());
         //authentication: project.semi.securitytest.config.auth.PrincipalDetails@50a13b68
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        System.out.println("authentication: " + oAuth2User.getAttributes());
+        System.out.println("authentication: " + oAuth2User.getAttributes()); //getAttributes() Map 타입
         System.out.println("oauth2User: " + oauth.getAttributes());
         return "세션 정보 확인하기";
     }
@@ -55,6 +55,7 @@ public class IndexController {
 
     @GetMapping("/user")
     public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails: " +  principalDetails.getUser());
         return "user";
     }
 

@@ -23,11 +23,21 @@ import java.util.Map;
 //Security Session -> Authentication -> UserDetails
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
+    private Map<String, Object> attributes;
+
+    //생성자
+    public PrincipalDetails(User user) {
+        this.user = user;
+    }
+
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
 
     public User getUser() {
         return user;
@@ -37,7 +47,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     //OAuth2User 오버라이드 메소드
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return attributes;
     }
 
 
